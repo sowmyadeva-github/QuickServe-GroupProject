@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickServe - Manage Providers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .sidebar {
+            background: #fff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        .sidebar h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            margin-bottom: 0.8rem;
+        }
+        .sidebar ul li a {
+            display: block;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #555;
+        }
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background: #3498db;
+            color: #fff;
+        }
+        .sidebar ul li a i {
+            margin-right: 0.5rem;
+            width: 20px;
+        }
+        .main-content {
+            background: #fff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        .status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .status.approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.9rem;
+            margin-right: 0.3rem;
+            cursor: pointer;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #777;
+        }
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo">
+            <h1>Quick<span>Serve</span></h1>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/services">Services</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/profile" class="btn btn-outline">Profile</a></li>
+                <li><a href="/login" class="btn btn-primary">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3>Admin Menu</h3>
+            <ul>
+                <li><a href="/admin-dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="/admin-users"><i class="fas fa-users"></i> Manage Users</a></li>
+                <li><a href="/admin-providers" class="active"><i class="fas fa-tools"></i> Manage Providers</a></li>
+                <li><a href="/admin-bookings"><i class="fas fa-calendar-check"></i> All Bookings</a></li>
+                <li><a href="/admin-analytics"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                <li><a href="/profile"><i class="fas fa-user"></i> Profile</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>Manage Service Providers</h2>
+            <div id="providersContainer">
+                <table id="providersTable">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Service(s)</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="providersBody">
+                    <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>QuickServe</h3>
+                <p>Your one-stop solution for all service needs.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/services">Services</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/login">Logout</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-envelope"></i> support@quickserve.com</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 QuickServe. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="/js/script.js"></script>
+<script>
+    // Mock providers with their services
+    const mockProviders = [
+        { id: 2, name: 'Mike Johnson', email: 'mike.provider@example.com', services: ['Plumbing', 'Electrical', 'Cleaning'], status: 'APPROVED' },
+        { id: 5, name: 'Tom Electric', email: 'tom.provider@example.com', services: ['Electrical', 'Carpentry'], status: 'APPROVED' },
+        { id: 6, name: 'Sarah Clean', email: 'sarah.provider@example.com', services: ['Cleaning'], status: 'PENDING' }
+    ];
+
+    const tbody = document.getElementById('providersBody');
+    tbody.innerHTML = '';
+
+    mockProviders.forEach(provider => {
+        const statusClass = provider.status.toLowerCase();
+        const servicesList = provider.services.join(', ');
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${provider.name}</td>
+                <td>${servicesList}</td>
+                <td>${provider.email}</td>
+                <td><span class="status ${statusClass}">${provider.status}</span></td>
+                <td>
+                    <button class="btn btn-sm btn-outline" onclick="viewProvider(${provider.id})">View</button>
+                    ${provider.status === 'APPROVED'
+                        ? `<button class="btn btn-sm btn-outline" onclick="suspendProvider(${provider.id})">Suspend</button>`
+                        : `<button class="btn btn-sm btn-primary" onclick="approveProvider(${provider.id})">Approve</button>
+                           <button class="btn btn-sm btn-outline" onclick="rejectProvider(${provider.id})">Reject</button>`
+                    }
+                </td>
+            </tr>
+        `;
+    });
+
+    window.viewProvider = (id) => {
+        alert(`View provider ${id} details`);
+    };
+
+    window.suspendProvider = (id) => {
+        alert(`Provider ${id} suspended`);
+        location.reload();
+    };
+
+    window.approveProvider = (id) => {
+        alert(`Provider ${id} approved`);
+        location.reload();
+    };
+
+    window.rejectProvider = (id) => {
+        alert(`Provider ${id} rejected`);
+        location.reload();
+    };
+</script>
+</body>
+</html>

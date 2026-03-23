@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickServe - Login / Sign Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header>...</header> <!-- same as index, with active class removed -->
+<main>
+    <div class="container">
+        <div class="auth-container">
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="signup">Sign Up</div>
+            </div>
+            <div class="auth-content">
+                <div id="login-form" class="auth-form active">
+                    <form id="login">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="login-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="login-password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Login as:</label>
+                            <div class="role-selector" id="login-role-selector">
+                                <div class="role-option selected" data-role="customer"><i class="fas fa-user"></i><span>Customer</span></div>
+                                <div class="role-option" data-role="provider"><i class="fas fa-tools"></i><span>Provider</span></div>
+                                <div class="role-option" data-role="admin"><i class="fas fa-shield-alt"></i><span>Admin</span></div>
+                            </div>
+                        </div>
+                        <div class="forgot-password"><a href="#">Forgot Password?</a></div>
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </form>
+                </div>
+                <div id="signup-form" class="auth-form">
+                    <form id="signup">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="signup-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="signup-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="signup-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="signup-confirm" required>
+                        </div>
+                        <div class="form-group">
+                            <label>I am a:</label>
+                            <div class="role-selector" id="signup-role-selector">
+                                <div class="role-option selected" data-role="customer"><i class="fas fa-user"></i><span>Customer</span></div>
+                                <div class="role-option" data-role="provider"><i class="fas fa-tools"></i><span>Provider</span></div>
+                                <div class="role-option" data-role="admin"><i class="fas fa-shield-alt"></i><span>Admin</span></div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+            <div class="auth-footer"><p>By continuing, you agree to our Terms of Service.</p></div>
+        </div>
+    </div>
+</main>
+<footer>...</footer>
+<script src="/js/script.js"></script>
+<script>
+    // Tab switching
+    const tabs = document.querySelectorAll('.auth-tab');
+    const forms = document.querySelectorAll('.auth-form');
+    tabs.forEach(tab => tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        forms.forEach(f => f.classList.remove('active'));
+        document.getElementById(tab.dataset.tab + '-form').classList.add('active');
+    }));
+    // Role selectors
+    document.querySelectorAll('#login-role-selector .role-option').forEach(opt => opt.addEventListener('click', function() {
+        document.querySelectorAll('#login-role-selector .role-option').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+    }));
+    document.querySelectorAll('#signup-role-selector .role-option').forEach(opt => opt.addEventListener('click', function() {
+        document.querySelectorAll('#signup-role-selector .role-option').forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+    }));
+    // URL param for signup
+    if (new URLSearchParams(window.location.search).get('signup') === 'true') {
+        document.querySelector('[data-tab="signup"]').click();
+    }
+    // Login form submit
+    document.getElementById('login').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const role = document.querySelector('#login-role-selector .role-option.selected').dataset.role;
+        if (role === 'customer') window.location.href = '/customer-dashboard';
+        else if (role === 'provider') window.location.href = '/provider-dashboard';
+        else if (role === 'admin') window.location.href = '/admin-dashboard';
+    });
+    // Signup form submit
+    document.getElementById('signup').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const pwd = document.getElementById('signup-password').value;
+        const confirm = document.getElementById('signup-confirm').value;
+        if (pwd !== confirm) {
+            alert('Passwords do not match!');
+            return;
+        }
+        alert('Signup successful! Please login.');
+        document.querySelector('[data-tab="login"]').click();
+    });
+</script>
+</body>
+</html>

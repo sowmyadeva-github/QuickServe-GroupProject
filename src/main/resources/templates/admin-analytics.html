@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickServe - Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .sidebar {
+            background: #fff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        .sidebar h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            margin-bottom: 0.8rem;
+        }
+        .sidebar ul li a {
+            display: block;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #555;
+        }
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background: #3498db;
+            color: #fff;
+        }
+        .sidebar ul li a i {
+            margin-right: 0.5rem;
+            width: 20px;
+        }
+        .main-content {
+            background: #fff;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+        .stat-card p {
+            color: #777;
+        }
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin: 2rem 0;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #777;
+        }
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo">
+            <h1>Quick<span>Serve</span></h1>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/services">Services</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/profile" class="btn btn-outline">Profile</a></li>
+                <li><a href="/login" class="btn btn-primary">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3>Admin Menu</h3>
+            <ul>
+                <li><a href="/admin-dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="/admin-users"><i class="fas fa-users"></i> Manage Users</a></li>
+                <li><a href="/admin-providers"><i class="fas fa-tools"></i> Manage Providers</a></li>
+                <li><a href="/admin-bookings"><i class="fas fa-calendar-check"></i> All Bookings</a></li>
+                <li><a href="/admin-analytics" class="active"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                <li><a href="/profile"><i class="fas fa-user"></i> Profile</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>Analytics Dashboard</h2>
+            <div class="stats-grid" id="statsGrid">
+                <!-- Populated by JavaScript -->
+            </div>
+
+            <div class="chart-container">
+                <canvas id="bookingsChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>QuickServe</h3>
+                <p>Your one-stop solution for all service needs.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/services">Services</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/login">Logout</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-envelope"></i> support@quickserve.com</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 QuickServe. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="/js/script.js"></script>
+<script>
+    // Fetch data for stats and charts
+    Promise.all([
+        fetch('/api/users').then(res => res.ok ? res.json() : []),
+        fetch('/api/bookings').then(res => res.ok ? res.json() : [])
+    ])
+    .then(([users, bookings]) => {
+        // Calculate stats
+        const totalUsers = users.length;
+        const providers = users.filter(u => u.role && u.role.toUpperCase() === 'PROVIDER').length;
+        const totalBookings = bookings.length;
+        const revenue = bookings
+            .filter(b => b.status === 'COMPLETED')
+            .reduce((sum, b) => sum + (b.totalPrice || 0), 0);
+        const revenueFormatted = revenue.toFixed(2);
+
+        document.getElementById('statsGrid').innerHTML = `
+            <div class="stat-card"><h3>${totalUsers}</h3><p>Total Users</p></div>
+            <div class="stat-card"><h3>${providers}</h3><p>Providers</p></div>
+            <div class="stat-card"><h3>${totalBookings}</h3><p>Bookings</p></div>
+            <div class="stat-card"><h3>$${revenueFormatted}</h3><p>Revenue</p></div>
+        `;
+
+        // Prepare data for charts
+        // Group bookings by month (last 6 months)
+        const months = [];
+        const bookingCounts = [];
+        const revenueData = [];
+        const now = new Date();
+        for (let i = 5; i >= 0; i--) {
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            const monthName = d.toLocaleString('default', { month: 'short' });
+            months.push(monthName);
+            // Count bookings in that month
+            const count = bookings.filter(b => {
+                const bd = new Date(b.bookingDate);
+                return bd.getMonth() === d.getMonth() && bd.getFullYear() === d.getFullYear();
+            }).length;
+            bookingCounts.push(count);
+            // Sum revenue from completed bookings in that month
+            const rev = bookings
+                .filter(b => b.status === 'COMPLETED' && new Date(b.bookingDate).getMonth() === d.getMonth() && new Date(b.bookingDate).getFullYear() === d.getFullYear())
+                .reduce((sum, b) => sum + (b.totalPrice || 0), 0);
+            revenueData.push(rev);
+        }
+
+        // Bookings Chart
+        const ctx1 = document.getElementById('bookingsChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Number of Bookings',
+                    data: bookingCounts,
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52,152,219,0.1)',
+                    tension: 0.1,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Bookings Over Last 6 Months'
+                    }
+                }
+            }
+        });
+
+        // Revenue Chart
+        const ctx2 = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: revenueData,
+                    backgroundColor: '#2ecc71'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Monthly Revenue'
+                    }
+                }
+            }
+        });
+    })
+    .catch(err => {
+        console.error('Error loading analytics data:', err);
+        document.getElementById('statsGrid').innerHTML = '<div class="empty-state">Error loading data.</div>';
+        // Fallback empty charts
+        document.getElementById('bookingsChart').remove();
+        document.getElementById('revenueChart').remove();
+        document.querySelector('.main-content').innerHTML += '<p>Could not load charts.</p>';
+    });
+</script>
+</body>
+</html>

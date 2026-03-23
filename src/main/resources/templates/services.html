@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickServe - Find Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo">
+            <h1>Quick<span>Serve</span></h1>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/services" class="active">Services</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/login" class="btn btn-outline">Login</a></li>
+                <li><a href="/login?signup=true" class="btn btn-primary">Sign Up</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="services-header">
+        <div class="container">
+            <h1>Find Professional Services</h1>
+            <p>Browse trusted providers near you</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="services-layout">
+            <!-- Filters Sidebar -->
+            <aside class="filters">
+                <h3>Filters</h3>
+                <div class="filter-group">
+                    <h4>Category</h4>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-plumbing">
+                        <label for="cat-plumbing">Plumbing</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-electrical">
+                        <label for="cat-electrical">Electrical</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-cleaning">
+                        <label for="cat-cleaning">Cleaning</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-carpentry">
+                        <label for="cat-carpentry">Carpentry</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="cat-painting">
+                        <label for="cat-painting">Painting</label>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h4>Price Range</h4>
+                    <div class="price-range">
+                        <input type="number" placeholder="Min" id="price-min">
+                        <input type="number" placeholder="Max" id="price-max">
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h4>Rating</h4>
+                    <div class="filter-option">
+                        <input type="radio" name="rating" id="rating-all" checked>
+                        <label for="rating-all">All</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" name="rating" id="rating-4">
+                        <label for="rating-4">4+ Stars</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" name="rating" id="rating-3">
+                        <label for="rating-3">3+ Stars</label>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" id="applyFilters">Apply Filters</button>
+            </aside>
+
+            <!-- Service Listings -->
+            <div class="service-listings">
+                <div class="service-grid" id="serviceGrid"></div>
+                <div class="pagination">
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>QuickServe</h3>
+                <p>Your one-stop solution for all service needs.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/services">Services</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/login">Login</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-envelope"></i> support@quickserve.com</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 QuickServe. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="/js/script.js"></script>
+<script>
+    // Mock provider services
+    const mockServices = [
+        { id: 1, provider: 'Mike Johnson', service: 'Plumbing', category: 'Plumbing', price: 75.00, rating: 4.8, reviews: 32 },
+        { id: 2, provider: 'Mike Johnson', service: 'Electrical', category: 'Electrical', price: 85.00, rating: 4.7, reviews: 28 },
+        { id: 3, provider: 'Spark Electric', service: 'Electrical', category: 'Electrical', price: 90.00, rating: 4.9, reviews: 45 },
+        { id: 4, provider: 'Clean Masters', service: 'House Cleaning', category: 'Cleaning', price: 65.00, rating: 4.5, reviews: 52 },
+        { id: 5, provider: 'WoodCraft', service: 'Carpentry', category: 'Carpentry', price: 95.00, rating: 4.8, reviews: 19 },
+        { id: 6, provider: 'ColorPro', service: 'Painting', category: 'Painting', price: 70.00, rating: 4.6, reviews: 23 }
+    ];
+
+    function getIcon(category) {
+        const map = {
+            'Plumbing': 'fa-wrench',
+            'Electrical': 'fa-bolt',
+            'Cleaning': 'fa-broom',
+            'Carpentry': 'fa-hammer',
+            'Painting': 'fa-paint-brush'
+        };
+        return map[category] || 'fa-tools';
+    }
+
+    function renderServices(services) {
+        const grid = document.getElementById('serviceGrid');
+        grid.innerHTML = '';
+
+        services.forEach(s => {
+            grid.innerHTML += `
+                <div class="provider-card">
+                    <div class="provider-image">
+                        <i class="fas ${getIcon(s.category)}"></i>
+                    </div>
+                    <div class="provider-info">
+                        <div class="provider-name">${s.provider}</div>
+                        <div class="provider-category">${s.service}</div>
+                        <div class="provider-rating">
+                            <i class="fas fa-star"></i> ${s.rating} <span>(${s.reviews} reviews)</span>
+                        </div>
+                        <div class="provider-price">$${s.price} <small>/hr</small></div>
+                        <button class="btn-book" onclick="bookService(${s.id})">Book Now</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    window.bookService = (id) => {
+        window.location.href = `/booking?serviceId=${id}`;
+    };
+
+    // Initial render
+    renderServices(mockServices);
+
+    // Filter functionality
+    document.getElementById('applyFilters').addEventListener('click', () => {
+        const selectedCategories = [];
+        if (document.getElementById('cat-plumbing').checked) selectedCategories.push('Plumbing');
+        if (document.getElementById('cat-electrical').checked) selectedCategories.push('Electrical');
+        if (document.getElementById('cat-cleaning').checked) selectedCategories.push('Cleaning');
+        if (document.getElementById('cat-carpentry').checked) selectedCategories.push('Carpentry');
+        if (document.getElementById('cat-painting').checked) selectedCategories.push('Painting');
+
+        const minPrice = parseFloat(document.getElementById('price-min').value) || 0;
+        const maxPrice = parseFloat(document.getElementById('price-max').value) || 1000;
+
+        const ratingFilter = document.querySelector('input[name="rating"]:checked')?.id || 'rating-all';
+        let minRating = 0;
+        if (ratingFilter === 'rating-4') minRating = 4;
+        if (ratingFilter === 'rating-3') minRating = 3;
+
+        let filtered = mockServices;
+
+        if (selectedCategories.length > 0) {
+            filtered = filtered.filter(s => selectedCategories.includes(s.category));
+        }
+
+        filtered = filtered.filter(s => s.price >= minPrice && s.price <= maxPrice);
+
+        if (minRating > 0) {
+            filtered = filtered.filter(s => s.rating >= minRating);
+        }
+
+        renderServices(filtered);
+    });
+</script>
+</body>
+</html>

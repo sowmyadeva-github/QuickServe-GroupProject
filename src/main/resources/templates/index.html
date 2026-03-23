@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickServe - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo">
+            <h1>Quick<span>Serve</span></h1>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/services">Services</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/login" class="btn btn-outline">Login</a></li>
+                <li><a href="/login?signup=true" class="btn btn-primary">Sign Up</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="container">
+            <h1>Find trusted professionals for any job</h1>
+            <p>From plumbing to painting – book verified experts in minutes</p>
+            <div class="search-box">
+                <input type="text" placeholder="What service do you need?" id="searchService">
+                <input type="text" placeholder="Location" id="searchLocation">
+                <button id="searchBtn"><i class="fas fa-search"></i> Search</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="popular-services">
+        <div class="container">
+            <h2>Popular Services</h2>
+            <div class="grid-4" id="popularServicesList"></div>
+        </div>
+    </section>
+
+    <section class="categories">
+        <div class="container">
+            <h2>Browse by Category</h2>
+            <div class="grid-4" id="categoriesList"></div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="grid-3">
+                <div class="step">
+                    <i class="fas fa-search"></i>
+                    <h3>1. Search</h3>
+                    <p>Find the service you need</p>
+                </div>
+                <div class="step">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>2. Book</h3>
+                    <p>Select a provider and time</p>
+                </div>
+                <div class="step">
+                    <i class="fas fa-star"></i>
+                    <h3>3. Relax & Rate</h3>
+                    <p>Get the job done and review</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2>What Our Customers Say</h2>
+            <div class="grid-3" id="testimonialsList"></div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>QuickServe</h3>
+                <p>Your one-stop solution for all service needs.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/services">Services</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/login">Login</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-envelope"></i> support@quickserve.com</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 QuickServe. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="/js/script.js"></script>
+<script>
+    // Mock data (replace with API calls later)
+    const popularServices = [
+        { name: 'Plumbing', icon: 'fa-wrench', description: 'Fix leaks, install fixtures' },
+        { name: 'Electrical', icon: 'fa-bolt', description: 'Wiring, repairs' },
+        { name: 'Cleaning', icon: 'fa-broom', description: 'Home & office cleaning' },
+        { name: 'Carpentry', icon: 'fa-hammer', description: 'Custom furniture' }
+    ];
+    const categories = ['Plumbing', 'Electrical', 'Cleaning', 'Carpentry'];
+    const testimonials = [
+        { name: 'John D.', rating: 5, comment: 'Excellent service!' },
+        { name: 'Sarah M.', rating: 4, comment: 'Very professional.' },
+        { name: 'Mike T.', rating: 5, comment: 'Quick and easy booking.' }
+    ];
+
+    function renderPopular() {
+        const container = document.getElementById('popularServicesList');
+        popularServices.forEach(s => container.innerHTML += `
+            <div class="service-card">
+                <i class="fas ${s.icon}"></i>
+                <h3>${s.name}</h3>
+                <p>${s.description}</p>
+            </div>
+        `);
+    }
+    function renderCategories() {
+        const container = document.getElementById('categoriesList');
+        categories.forEach(c => container.innerHTML += `
+            <div class="category-card" onclick="window.location.href='/services?category=${c}'">
+                <h3>${c}</h3>
+            </div>
+        `);
+    }
+    function renderTestimonials() {
+        const container = document.getElementById('testimonialsList');
+        testimonials.forEach(t => {
+            let stars = '';
+            for (let i=0; i<t.rating; i++) stars += '<i class="fas fa-star"></i>';
+            container.innerHTML += `
+                <div class="testimonial-card">
+                    <div class="rating">${stars}</div>
+                    <p>"${t.comment}"</p>
+                    <h4>- ${t.name}</h4>
+                </div>
+            `;
+        });
+    }
+    renderPopular(); renderCategories(); renderTestimonials();
+
+    document.getElementById('searchBtn').addEventListener('click', () => {
+        const service = document.getElementById('searchService').value;
+        const location = document.getElementById('searchLocation').value;
+        window.location.href = `/services?service=${encodeURIComponent(service)}&location=${encodeURIComponent(location)}`;
+    });
+</script>
+</body>
+</html>
