@@ -1,7 +1,5 @@
 # Quick Serve
 
-This app was created with Bootify.io - tips on working with the code [can be found here](https://bootify.io/next-steps/).
-
 ## Development
 
 Update your local database connection in `application.yml` or create your own `application-local.yml` file to override settings for development.
